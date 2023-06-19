@@ -26,9 +26,6 @@ def plot_clip(clip_path,  directory = None, bandpass = [1, 10000], mark_at_s = N
 
     audio = Audio.from_file(full_clip_path).bandpass(bandpass[0],bandpass[1],order=10)
     
-    # Clear previous plot if any
-    ipd.clear_output()
-    
     # Add length markings 
     if mark_at_s is not None:
         for s in mark_at_s:
@@ -154,7 +151,8 @@ def load_scores_df(scores_csv_path,
 def annotate(audio_dir, 
              valid_annotations = ["0", "1", "u"],
              scores_filename = "_scores.csv", 
-             annotation_column = 'annotation',
+             scores_column = 'score',
+             annotation_column = None,
              index_column = 'clip',
              notes_column = 'notes',
              custom_annotation_column = 'additional_annotation',
@@ -188,20 +186,28 @@ def annotate(audio_dir,
                                custom_annotation_column = custom_annotation_column,
                                sort_by = sort_by, 
                                dry_run = dry_run)
-        
-    # if (date_filter is not None):
-    #     assert (not annotation_csv_exists), "Annotation data already exists! Can't filter dates"
-    #     scores_df.loc[~scores_df['date'].isin(date_filter), annotation_column] = "not reviewed"
-    # if card_filter is not None:
-    #     assert (not annotation_csv_exists), "Annotation data already exists! Can't filter dates"
-    #     scores_df.loc[~scores_df['card'].isin(card_filter), annotation_column] = "not reviewed"
     
     scores_df['filter'] = (~scores_df['date'].isin(date_filter)) & (~scores_df['card'].isin(card_filter))
     
     
     valid_rows = scores_df[~scores_df[annotation_column].notnull()]
     
+    # Print total variables
+    n_clips = len(scores_df)
+    n_clips_remaining = len(valid_rows)
+    n_skiped_clips = sum(~scores_df['filter'])
+    n_clips_filtered = n_clips - n_skiped_clips
+    
     for idx,row in valid_rows.iterrows():
+        # Print progress
+        annotated_total = n_clips - n_clips_remaining
+        annotated_not_skiped = sum(scores_df[annotation_column].notnull() & scores_df[annotation_column].isin(valid_annotations))
+        if (not date_filter) & (not card_filter):
+            print(f'{annotated_total} of {n_clips}')
+        else:
+            print(f'{annotated_not_skiped} of {n_clips_filtered}')
+        
+        # Annotate
         if row['filter']:
             print(f"Clip: {idx}")
             plot_clip(idx, audio_dir, mark_at_s = [3, 7])
@@ -215,5 +221,8 @@ def annotate(audio_dir,
         
         if not dry_run: 
             save_annotations_file(scores_df.drop('filter', axis = 1), scores_csv_path)
+        
+        # Clear previous plot if any
+        ipd.clear_output()
     
     return scores_df
