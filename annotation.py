@@ -198,6 +198,9 @@ def annotate(audio_dir,
     n_clips_filtered = n_clips - n_skiped_clips
     
     for idx,row in valid_rows.iterrows():
+        # Clear previous plot if any
+        ipd.clear_output()
+        
         # Print progress
         annotated_total = n_clips - n_clips_remaining
         annotated_not_skiped = sum(scores_df[annotation_column].notnull() & scores_df[annotation_column].isin(valid_annotations))
@@ -220,8 +223,6 @@ def annotate(audio_dir,
         
         if not dry_run: 
             save_annotations_file(scores_df.drop('filter', axis = 1), scores_csv_path)
-        
-        # Clear previous plot if any
-        ipd.clear_output()
+
     
     return scores_df
