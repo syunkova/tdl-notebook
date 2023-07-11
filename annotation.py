@@ -86,7 +86,7 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
         else:
             continue
     
-        return annotation, other_annotation, notes
+        return annotation,   other_annotation, notes
 
 def save_annotations_file(annotations_df, scores_csv_path):
     """Saves annotations csv at [scores_csv_path] with '_annotations' suffix
@@ -189,7 +189,8 @@ def annotate(audio_dir,
     scores_df['filter'] = (~scores_df['date'].isin(date_filter)) & (~scores_df['card'].isin(card_filter))
     
     # Create absolute path index
-    scores_df.index = audio_dir + '/' + scores_df.index 
+    scores_df['absolute_path'] = audio_dir + '/' + scores_df.index
+    scores_df = scores_df.set_index('absolute_path')
     
     valid_rows = scores_df[~scores_df[annotation_column].notnull()]
     
