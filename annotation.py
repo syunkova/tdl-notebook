@@ -202,7 +202,7 @@ def annotate(audio_dir,
     
     for idx,row in valid_rows.iterrows():
         # Clear previous plot if any
-        ipd.clear_output()
+        # ipd.clear_output()
         
         # Print progress
         annotated_total = n_clips - n_clips_remaining
