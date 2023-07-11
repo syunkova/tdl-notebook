@@ -99,7 +99,7 @@ def save_annotations_file(annotations_df, scores_csv_path):
 
 def load_scores_df(scores_csv_path, 
                    annotation_column = 'annotation',
-                   index_column = 'clip',
+                   index_column = 'relative_path',
                    notes_column = 'notes',
                    custom_annotation_column = 'additional_annotation',
                    sort_by = None, 
@@ -152,7 +152,7 @@ def annotate(audio_dir,
              valid_annotations = ["0", "1", "u"],
              scores_filename = "_scores.csv", 
              annotation_column = 'annotation',
-             index_column = 'clip',
+             index_column = 'relative_path',
              notes_column = 'notes',
              custom_annotation_column = 'additional_annotation',
              sort_by = None, 
@@ -188,6 +188,8 @@ def annotate(audio_dir,
     
     scores_df['filter'] = (~scores_df['date'].isin(date_filter)) & (~scores_df['card'].isin(card_filter))
     
+    # Create absolute path index
+    scores_df.index = audio_dir + '/' + scores_df.index 
     
     valid_rows = scores_df[~scores_df[annotation_column].notnull()]
     
@@ -212,7 +214,7 @@ def annotate(audio_dir,
         # Annotate
         if row['filter']:
             print(f"Clip: {idx}")
-            plot_clip(idx, audio_dir, mark_at_s = [3, 7])
+            plot_clip(idx, mark_at_s = [3, 7])
             annotations = user_input(valid_annotations, custom_annotations_dict = custom_annotations_dict, positive_annotation = '1')
             
             scores_df.at[idx, annotation_column] = annotations[0]
