@@ -190,7 +190,7 @@ def annotate(audio_dir,
     
     # Create absolute path index
     scores_df['absolute_path'] = audio_dir + '/' + scores_df.index
-    scores_df = scores_df.set_index('absolute_path')
+    # scores_df = scores_df.set_index('absolute_path')
     
     valid_rows = scores_df[~scores_df[annotation_column].notnull()]
     
@@ -215,7 +215,9 @@ def annotate(audio_dir,
         # Annotate
         if row['filter']:
             print(f"Clip: {idx}")
-            plot_clip(idx, mark_at_s = [3, 7])
+        
+            # plot_clip(idx, mark_at_s = [3, 7])
+            plot_clip(row['absolute_path'], mark_at_s = [3, 7])
             annotations = user_input(valid_annotations, custom_annotations_dict = custom_annotations_dict, positive_annotation = '1')
             
             scores_df.at[idx, annotation_column] = annotations[0]
@@ -225,7 +227,7 @@ def annotate(audio_dir,
             scores_df.at[idx, annotation_column] = "not reviewed"
         
         if not dry_run: 
-            save_annotations_file(scores_df.drop('filter', axis = 1), scores_csv_path)
+            save_annotations_file(scores_df.drop(['filter', 'absolute_path'], axis = 1), scores_csv_path)
 
     
     return scores_df
