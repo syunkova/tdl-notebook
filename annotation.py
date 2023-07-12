@@ -223,7 +223,7 @@ def annotate(audio_dir,
             # plot_clip(idx, mark_at_s = [3, 7])
             plot_clip(row['absolute_path'], mark_at_s = [3, 7])
             time.sleep(.1) # Added delay for stability (hopefully)
-            annotations = ipd.display(user_input(valid_annotations, custom_annotations_dict = custom_annotations_dict, positive_annotation = '1'))
+            annotations = user_input(valid_annotations, custom_annotations_dict = custom_annotations_dict, positive_annotation = '1')
             
             scores_df.at[idx, annotation_column] = annotations[0]
             scores_df.at[idx, custom_annotation_column] = annotations[1]

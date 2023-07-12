@@ -10,4 +10,7 @@ CSV sheet with relative file paths, that is starting from the parent data folder
 1. Google Drive account
 
 
+Debugging:
+Runtime > Restart Runtime
+
 ## Requires
