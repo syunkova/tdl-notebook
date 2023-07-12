@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import IPython.display as ipd
 import os
+import time
 
 from utils import find_path
 
@@ -46,8 +47,8 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
         _type_: _description_
     """
     
-    # Make sure all options are strings
-    annotations_choices = [str(x) for x in annotations_choices]
+    # Make sure all strings are options
+    annotations_choices = [str(x).strip().lower() for x in annotations_choices]
     
     # Define paraments to be replaced
     other_annotation = ''
@@ -205,7 +206,7 @@ def annotate(audio_dir,
     
     for idx,row in valid_rows.iterrows():
         # Clear previous plot if any
-        # ipd.clear_output()
+        ipd.clear_output()
         
         # Print progress
         annotated_total = n_clips - n_clips_remaining
@@ -221,6 +222,7 @@ def annotate(audio_dir,
         
             # plot_clip(idx, mark_at_s = [3, 7])
             plot_clip(row['absolute_path'], mark_at_s = [3, 7])
+            time.sleep(.1) # Added delay for stability (hopefully)
             annotations = ipd.display(user_input(valid_annotations, custom_annotations_dict = custom_annotations_dict, positive_annotation = '1'))
             
             scores_df.at[idx, annotation_column] = annotations[0]
