@@ -46,6 +46,9 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
         _type_: _description_
     """
     
+    # Make sure all options are strings
+    annotations_choices = [str(x) for x in annotations_choices]
+    
     # Define paraments to be replaced
     other_annotation = ''
     notes = ''
@@ -218,7 +221,7 @@ def annotate(audio_dir,
         
             # plot_clip(idx, mark_at_s = [3, 7])
             plot_clip(row['absolute_path'], mark_at_s = [3, 7])
-            annotations = user_input(valid_annotations, custom_annotations_dict = custom_annotations_dict, positive_annotation = '1')
+            annotations = ipd.display(user_input(valid_annotations, custom_annotations_dict = custom_annotations_dict, positive_annotation = '1'))
             
             scores_df.at[idx, annotation_column] = annotations[0]
             scores_df.at[idx, custom_annotation_column] = annotations[1]
