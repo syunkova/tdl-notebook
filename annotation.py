@@ -90,7 +90,7 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
         else:
             continue
     
-        return annotation,   other_annotation, notes
+        return annotation, other_annotation, notes
 
 def save_annotations_file(annotations_df, scores_csv_path):
     """Saves annotations csv at [scores_csv_path] with '_annotations' suffix
@@ -233,6 +233,5 @@ def annotate(audio_dir,
         
         if not dry_run: 
             save_annotations_file(scores_df.drop(['filter', 'absolute_path'], axis = 1), scores_csv_path)
-
     
     return scores_df
