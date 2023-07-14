@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import IPython.display as ipd
 import os
+import time
 
 from utils import find_path
 
@@ -45,6 +46,9 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
     Returns:
         _type_: _description_
     """
+    
+    # Make sure all strings are options
+    annotations_choices = [str(x).strip().lower() for x in annotations_choices]
     
     # Define paraments to be replaced
     other_annotation = ''
@@ -99,7 +103,7 @@ def save_annotations_file(annotations_df, scores_csv_path):
 
 def load_scores_df(scores_csv_path, 
                    annotation_column = 'annotation',
-                   index_column = 'clip',
+                   index_column = 'relative_path',
                    notes_column = 'notes',
                    custom_annotation_column = 'additional_annotation',
                    sort_by = None, 
@@ -151,9 +155,8 @@ def load_scores_df(scores_csv_path,
 def annotate(audio_dir, 
              valid_annotations = ["0", "1", "u"],
              scores_filename = "_scores.csv", 
-             scores_column = 'score',
-             annotation_column = None,
-             index_column = 'clip',
+             annotation_column = 'annotation',
+             index_column = 'relative_path',
              notes_column = 'notes',
              custom_annotation_column = 'additional_annotation',
              sort_by = None, 
@@ -189,6 +192,9 @@ def annotate(audio_dir,
     
     scores_df['filter'] = (~scores_df['date'].isin(date_filter)) & (~scores_df['card'].isin(card_filter))
     
+    # Create absolute path index
+    scores_df['absolute_path'] = audio_dir + '/' + scores_df.index
+    # scores_df = scores_df.set_index('absolute_path')
     
     valid_rows = scores_df[~scores_df[annotation_column].notnull()]
     
@@ -199,6 +205,9 @@ def annotate(audio_dir,
     n_clips_filtered = n_clips - n_skiped_clips
     
     for idx,row in valid_rows.iterrows():
+        # Clear previous plot if any
+        ipd.clear_output()
+        
         # Print progress
         annotated_total = n_clips - n_clips_remaining
         annotated_not_skiped = sum(scores_df[annotation_column].notnull() & scores_df[annotation_column].isin(valid_annotations))
@@ -210,7 +219,10 @@ def annotate(audio_dir,
         # Annotate
         if row['filter']:
             print(f"Clip: {idx}")
-            plot_clip(idx, audio_dir, mark_at_s = [3, 7])
+        
+            # plot_clip(idx, mark_at_s = [3, 7])
+            plot_clip(row['absolute_path'], mark_at_s = [3, 7])
+            time.sleep(.1) # Added delay for stability (hopefully)
             annotations = user_input(valid_annotations, custom_annotations_dict = custom_annotations_dict, positive_annotation = '1')
             
             scores_df.at[idx, annotation_column] = annotations[0]
@@ -220,9 +232,6 @@ def annotate(audio_dir,
             scores_df.at[idx, annotation_column] = "not reviewed"
         
         if not dry_run: 
-            save_annotations_file(scores_df.drop('filter', axis = 1), scores_csv_path)
-        
-        # Clear previous plot if any
-        ipd.clear_output()
+            save_annotations_file(scores_df.drop(['filter', 'absolute_path'], axis = 1), scores_csv_path)
     
     return scores_df

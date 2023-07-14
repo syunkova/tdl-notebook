@@ -2,8 +2,7 @@
 
 import os
 from glob import glob
-
-
+import pandas as pd 
 
 def find_path(file_name, path):
     """ Searches [path] for [file_name]
@@ -23,3 +22,9 @@ def find_path(file_name, path):
     assert len(files) == 1, f"Multiple files found for {file_name}! {files}"
     
     return files[0]
+
+
+def create_relative_path(scores_df):
+    scores_df = scores_df.drop('Unnamed: 0', axis = 1)
+    scores_df['relative_path'] = scores_df['file'].str.split('/', expand = True).iloc[:,-2] + '/' + scores_df['clip']
+    return scores_df
