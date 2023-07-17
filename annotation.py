@@ -57,7 +57,7 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
     # Wait for user input within expected parameters
     valid_annotation = False
     while valid_annotation==False:
-        annotation = str(input(f"Enter annotation. Valid options are {annotations_choices} TEST.\n").strip()).lower()
+        annotation = str(input(f"Enter annotation. Valid options are {annotations_choices}.\n").strip()).lower()
         
         if annotation not in annotations_choices:
             print('Not a valid annotation. Please try again.')
@@ -67,7 +67,7 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
             valid_custum_annotation = False
             
             while valid_custum_annotation!=True:
-                other_annotation = str(input(f"Add any other annotation? Valid options are {custom_annotations_dict.keys()} or press enter to skip.")).lower()
+                other_annotation = str(input(f"Add any other annotation? Valid options are {custom_annotations_dict.keys()} or press enter to skip.\n")).lower()
                 
                 if other_annotation in custom_annotations_dict.keys():
                     other_annotation = custom_annotations_dict[other_annotation]
@@ -81,7 +81,7 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
                     print('Not a valid annotation. Please try again.')
                     continue
             
-        notes = str(input('Enter any notes you would like to make or press enter to skip.'))
+        notes = str(input('Enter any notes you would like to make or press enter to skip.\n'))
         proceed = input(f"Does this look right? Pressing 'r' to try again.").lower()
         
         if proceed!='r':
