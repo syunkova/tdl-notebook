@@ -57,7 +57,7 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
     # Wait for user input within expected parameters
     valid_annotation = False
     while valid_annotation==False:
-        annotation = str(input(f"Enter annotation. Valid options are {annotations_choices}.").strip()).lower()
+        annotation = str(input(f"Enter annotation. Valid options are {annotations_choices}.\n").strip()).lower()
         
         if annotation not in annotations_choices:
             print('Not a valid annotation. Please try again.')
