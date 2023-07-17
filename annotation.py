@@ -82,7 +82,7 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
                     continue
             
         notes = str(input('Enter any notes you would like to make or press enter to skip.\n'))
-        proceed = input(f"Does this look right? Pressing 'r' to try again.").lower()
+        proceed = input(f"Does this look right? Pressing 'r' to try again.\n").lower()
         
         if proceed!='r':
             valid_annotation = True
