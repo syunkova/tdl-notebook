@@ -6,13 +6,11 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import os
 from tqdm import tqdm
-
-
+import time
+import sys
 
 from opensoundscape.audio import Audio
 from opensoundscape.spectrogram import Spectrogram
-
-
 
 def create_clip(audio_path, st_time, end_time, margin = 3, plot = False):
     audio = Audio.from_file(audio_path)
@@ -106,4 +104,18 @@ if __name__ == "__main__":
                     args.st,
                     args.ed,
                     args.scores)
+    
+    # Create readme file
+    
+    with open(os.path.join(dest_dir,'_README.txt'), 'w') as f:
+        read_me_text = f'Create on {time.ctime()}' + ' ' +\
+        'Using https://github.com/LeonardoViotti/tdl-notebook/data-prep/create-clips.py' '\n' +\
+        '\n' +\
+        'python ' + ' '.join(sys.argv)
+        
+        f.write(read_me_text)
+
+
+
+
 
