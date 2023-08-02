@@ -78,7 +78,7 @@ if __name__ == "__main__":
     df = pd.read_csv(args.data)
     
     # Make sure df is sorted by score
-    df = df.sort_values(args.scores)
+    df = df.sort_values(args.scores, ascending= False)
     
     # Filter clips
     if args.top is not None:
