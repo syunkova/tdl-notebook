@@ -57,7 +57,7 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
     # Wait for user input within expected parameters
     valid_annotation = False
     while valid_annotation==False:
-        annotation = str(input(f"Enter annotation. Valid options are {annotations_choices}.").strip()).lower()
+        annotation = str(input(f"Enter annotation. Valid options are {annotations_choices}.\n").strip()).lower()
         
         if annotation not in annotations_choices:
             print('Not a valid annotation. Please try again.')
@@ -67,7 +67,7 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
             valid_custum_annotation = False
             
             while valid_custum_annotation!=True:
-                other_annotation = str(input(f"Add any other annotation? Valid options are {custom_annotations_dict.keys()} or press enter to skip.")).lower()
+                other_annotation = str(input(f"Add any other annotation? Valid options are {custom_annotations_dict.keys()} or press enter to skip.\n")).lower()
                 
                 if other_annotation in custom_annotations_dict.keys():
                     other_annotation = custom_annotations_dict[other_annotation]
@@ -81,8 +81,8 @@ def user_input(annotations_choices, custom_annotations_dict = None, positive_ann
                     print('Not a valid annotation. Please try again.')
                     continue
             
-        notes = str(input('Enter any notes you would like to make or press enter to skip.'))
-        proceed = input(f"Does this look right? Pressing 'r' to try again.").lower()
+        notes = str(input('Enter any notes you would like to make or press enter to skip.\n'))
+        proceed = input(f"Does this look right? Pressing 'r' to try again.\n").lower()
         
         if proceed!='r':
             valid_annotation = True
@@ -163,6 +163,7 @@ def annotate(audio_dir,
              date_filter = [], 
              card_filter = [], 
              custom_annotations_dict = None,
+             n_sample = None,
              dry_run = False):
     """Loops through detection scores data that hasn't been annated and aks user to input annotations.
 
@@ -174,6 +175,7 @@ def annotate(audio_dir,
         dates_filter (list (str), optional): List dates to be annotated (skip others). Defaults to empty list, [].
         card_filter (list (str), optional): List cards to be annotated (skip others). Defaults to empty list, [].
         custom_annotations_dict (dict, optional): _description_. Defaults to None.
+        n_sample (int, optional): Sample from valid rows. Defaults to None.
         dry_run (bool, optional):  Not export outputs. Defaults to False.
     
     Returns:
@@ -190,18 +192,23 @@ def annotate(audio_dir,
                                sort_by = sort_by, 
                                dry_run = dry_run)
     
-    scores_df['filter'] = (~scores_df['date'].isin(date_filter)) & (~scores_df['card'].isin(card_filter))
+    if date_filter or card_filter:
+        scores_df['skip'] = (scores_df['date'].isin(date_filter)) | (scores_df['card'].isin(card_filter))
+    else:
+        scores_df['skip'] = False
     
     # Create absolute path index
     scores_df['absolute_path'] = audio_dir + '/' + scores_df.index
     # scores_df = scores_df.set_index('absolute_path')
     
     valid_rows = scores_df[~scores_df[annotation_column].notnull()]
+    if n_sample is not None:
+        valid_rows = valid_rows.sample(n_sample)
     
     # Print total variables
     n_clips = len(scores_df)
     n_clips_remaining = len(valid_rows)
-    n_skiped_clips = sum(~scores_df['filter'])
+    n_skiped_clips = sum(scores_df['skip'])
     n_clips_filtered = n_clips - n_skiped_clips
     
     for idx,row in valid_rows.iterrows():
@@ -217,7 +224,9 @@ def annotate(audio_dir,
             print(f'{annotated_not_skiped} of {n_clips_filtered}')
         
         # Annotate
-        if row['filter']:
+        if row['skip']:
+            scores_df.at[idx, annotation_column] = "not reviewed"
+        else:
             print(f"Clip: {idx}")
         
             # plot_clip(idx, mark_at_s = [3, 7])
@@ -228,10 +237,8 @@ def annotate(audio_dir,
             scores_df.at[idx, annotation_column] = annotations[0]
             scores_df.at[idx, custom_annotation_column] = annotations[1]
             scores_df.at[idx, notes_column]= annotations[2]
-        else:
-            scores_df.at[idx, annotation_column] = "not reviewed"
         
         if not dry_run: 
-            save_annotations_file(scores_df.drop(['filter', 'absolute_path'], axis = 1), scores_csv_path)
+            save_annotations_file(scores_df.drop(['skip', 'absolute_path'], axis = 1), scores_csv_path)
     
     return scores_df
