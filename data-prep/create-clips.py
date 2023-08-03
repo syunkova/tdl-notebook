@@ -3,7 +3,11 @@ Based on a CSV file create target clips to be exported
 """
 import argparse
 import pandas as pd
+<<<<<<< HEAD
 from matplotlib import pyplot as plt
+=======
+import numpy as np
+>>>>>>> develop
 import os
 from tqdm import tqdm
 import time
@@ -21,7 +25,12 @@ def create_clips(df,
                  dest, 
                  margin = 3, 
                  path_col = 'file', st_col = 'start_time', 
+<<<<<<< HEAD
                  ed_col = 'end_time', score_col = 'score'):
+=======
+                 ed_col = 'end_time', score_col = 'score',
+                 dry_run = False):
+>>>>>>> develop
     """Crate clipped audio files based on input data with 
     
     Args:
@@ -38,7 +47,13 @@ def create_clips(df,
         score_col (str, optional):  Dataframe scores column name. Defaults to 'score'.
     """
     
+<<<<<<< HEAD
     for _,row in tqdm(df.iterrows()):
+=======
+    df['clip_name'] = np.nan
+    
+    for idx,row in tqdm(df.iterrows()):
+>>>>>>> develop
         file = row[path_col]
         st_s = row[st_col] 
         ed_s = row[ed_col]
@@ -48,7 +63,17 @@ def create_clips(df,
         
         filename, extension = file.split('/')[-1].split('.')
         dest_filename = f"{filename}_{int(st_s)}_{int(ed_s)}_s{round(score)}.{extension}"
+<<<<<<< HEAD
         clip.save(os.path.join(dest, dest_filename))
+=======
+        
+        df['clip_name'].iloc[idx] = dest_filename
+        
+        if not dry_run:
+            clip.save(os.path.join(dest, dest_filename))
+        
+    return df 
+>>>>>>> develop
 
 
 def parse_args():
@@ -65,6 +90,12 @@ def parse_args():
     parser.add_argument("--ed-col", dest='ed', type=str, default='end_time', help= 'Clip end column on [data].')
     parser.add_argument("--path-col", dest='path', type=str, default='file', help= 'Full audio file path column.')
     parser.add_argument("--scores-col", dest='scores', type=str, default='score', help= 'Scores column.')
+<<<<<<< HEAD
+=======
+    
+    # parser.add_argument("--subfolder-col", dest='scores', type=str, help= 'Column cointaining names of subfolders where clips are located, usually SD card ids.')
+    
+>>>>>>> develop
     parser.add_argument("--dry-run", dest="dry_run", action="store_true", default=False, help = "Don't export outputs.")
 
     
@@ -92,30 +123,43 @@ if __name__ == "__main__":
     else:
         dest_dir = args.dest
     
-    if not os.path.exists(dest_dir):
+    if (not args.dry_run) & (not os.path.exists(dest_dir)):
         os.mkdir(dest_dir)
     
     # Crate clips
+    df = create_clips(
+        df,
+        dest_dir,
+        args.padding,
+        args.path,
+        args.st,
+        args.ed,
+        args.scores,
+        args.dry_run)
+    
+    df['relative_path'] = "clips/" + df['clip_name']
+    
     if not args.dry_run:
-        create_clips(df, 
-                    dest_dir,
-                    args.padding,
-                    args.path,
-                    args.st,
-                    args.ed,
-                    args.scores)
-    
-    # Create readme file
-    
-    with open(os.path.join(dest_dir,'_README.txt'), 'w') as f:
-        read_me_text = f'Create on {time.ctime()}' + ' ' +\
-        'Using https://github.com/LeonardoViotti/tdl-notebook/data-prep/create-clips.py' '\n' +\
-        '\n' +\
-        'python ' + ' '.join(sys.argv)
         
-        f.write(read_me_text)
+        # Create CSV for the new data
+        df.to_csv(os.path.join(dest_dir,'_scores.csv'), index = False)
+        
+        # Create data readme file
+        with open(os.path.join(dest_dir,'_README.txt'), 'w') as f:
+            read_me_text = f'Create on {time.ctime()}' + ' ' +\
+            'Using https://github.com/LeonardoViotti/tdl-notebook/data-prep/create-clips.py' '\n' +\
+            '\n' +\
+            'python ' + ' '.join(sys.argv)
+            
+            f.write(read_me_text)
 
 
 
+# directory = '/Users/lviotti/Library/CloudStorage/Dropbox/Work/Kitzes/data/ribbitr-br/ribbit-br-hphyllodes-tdl'
 
+# os.path.exists( os.path.join(directory, 'SMM03757_20230108_050000_70_75_s87.wav'))
 
+# for _,row in df.iterrows():
+#     os.path.exists( os.path.join(directory, row['relative_path']))
+
+# os.listdir()
