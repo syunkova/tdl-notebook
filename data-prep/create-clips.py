@@ -134,13 +134,3 @@ if __name__ == "__main__":
             
             f.write(read_me_text)
 
-
-
-# directory = '/Users/lviotti/Library/CloudStorage/Dropbox/Work/Kitzes/data/ribbitr-br/ribbit-br-hphyllodes-tdl'
-
-# os.path.exists( os.path.join(directory, 'SMM03757_20230108_050000_70_75_s87.wav'))
-
-# for _,row in df.iterrows():
-#     os.path.exists( os.path.join(directory, row['relative_path']))
-
-# os.listdir()
