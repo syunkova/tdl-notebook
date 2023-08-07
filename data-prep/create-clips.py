@@ -3,11 +3,7 @@ Based on a CSV file create target clips to be exported
 """
 import argparse
 import pandas as pd
-<<<<<<< HEAD
-from matplotlib import pyplot as plt
-=======
 import numpy as np
->>>>>>> develop
 import os
 from tqdm import tqdm
 import time
@@ -25,12 +21,8 @@ def create_clips(df,
                  dest, 
                  margin = 3, 
                  path_col = 'file', st_col = 'start_time', 
-<<<<<<< HEAD
-                 ed_col = 'end_time', score_col = 'score'):
-=======
                  ed_col = 'end_time', score_col = 'score',
                  dry_run = False):
->>>>>>> develop
     """Crate clipped audio files based on input data with 
     
     Args:
@@ -47,13 +39,9 @@ def create_clips(df,
         score_col (str, optional):  Dataframe scores column name. Defaults to 'score'.
     """
     
-<<<<<<< HEAD
-    for _,row in tqdm(df.iterrows()):
-=======
     df['clip_name'] = np.nan
     
     for idx,row in tqdm(df.iterrows()):
->>>>>>> develop
         file = row[path_col]
         st_s = row[st_col] 
         ed_s = row[ed_col]
@@ -63,9 +51,6 @@ def create_clips(df,
         
         filename, extension = file.split('/')[-1].split('.')
         dest_filename = f"{filename}_{int(st_s)}_{int(ed_s)}_s{round(score)}.{extension}"
-<<<<<<< HEAD
-        clip.save(os.path.join(dest, dest_filename))
-=======
         
         df['clip_name'].iloc[idx] = dest_filename
         
@@ -73,7 +58,6 @@ def create_clips(df,
             clip.save(os.path.join(dest, dest_filename))
         
     return df 
->>>>>>> develop
 
 
 def parse_args():
@@ -90,12 +74,9 @@ def parse_args():
     parser.add_argument("--ed-col", dest='ed', type=str, default='end_time', help= 'Clip end column on [data].')
     parser.add_argument("--path-col", dest='path', type=str, default='file', help= 'Full audio file path column.')
     parser.add_argument("--scores-col", dest='scores', type=str, default='score', help= 'Scores column.')
-<<<<<<< HEAD
-=======
     
     # parser.add_argument("--subfolder-col", dest='scores', type=str, help= 'Column cointaining names of subfolders where clips are located, usually SD card ids.')
     
->>>>>>> develop
     parser.add_argument("--dry-run", dest="dry_run", action="store_true", default=False, help = "Don't export outputs.")
 
     
