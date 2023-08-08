@@ -1,6 +1,6 @@
 # Top Down Listening notebook (Colab)
 
-Top-down listening notebook in Google Colab with Google Drive mount.
+Top-down listening notebook compatible with Google Colab. It works by mounting Google Drive into the notebook and loading audio clips to be listenned. It needs a CSV file containing clip ids and file paths (in Google Drive) to store inputed labels. 
 
 ## Set-up instructions
 

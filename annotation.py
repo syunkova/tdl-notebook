@@ -230,7 +230,7 @@ def annotate(audio_dir,
             print(f"Clip: {idx}")
         
             # plot_clip(idx, mark_at_s = [3, 7])
-            plot_clip(row['absolute_path'], mark_at_s = [3, 7])
+            plot_clip(row['absolute_path'], mark_at_s = [2, 5])
             time.sleep(.1) # Added delay for stability (hopefully)
             annotations = user_input(valid_annotations, custom_annotations_dict = custom_annotations_dict, positive_annotation = '1')
             
