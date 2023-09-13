@@ -1,15 +1,19 @@
 # Top Down Listening notebook (Colab)
 
-Top-down listening notebook compatible with Google Colab. It works by mounting Google Drive into the notebook and loading audio clips to be listenned. It needs a CSV file containing clip ids and file paths (in Google Drive) to store inputed labels. 
+This contains scrips for listening to audio clips and labelling them (Top-down listening) using Google Colab. 
 
-## Set-up instructions
+It works by mounting Google Drive into the notebook and loading audio clips to be listenned. It needs a CSV file containing clip ids and file paths (in Google Drive) to store inputed labels. 
 
+## Set-up
 
-### 1. Create clips
+These are instructions to create the data and notebook configuarations. 
 
-```
-...
-```
+### 1. Creating clips and CSV data
+
+The notebook expects as input a CSV file containing 3 columns:
+ - `relative_path` (?):
+ - `start_time`
+ - `end_time` 
 
 ### 2. Create _scores.csv file
 
@@ -46,11 +50,30 @@ Update Notebook :
 
 ## Usage instructions
 
-1. Google Drive account
-2. Receive a shared folder link 
+Google Drive set-up
 
+1. Set-up a Google account if you don't already have one.
+2. Set-up a Google Drive account if you don't already have one.
+3. Share your google e-mail to receive a shared folder link.
+4. Accept the link invitation. The folder named [*your-folder-name-here*] will be located inside the *Shared with me* directory
+5. IMPORTANT: follow these steps so the notebook can see the data. It needs the [*your-folder-name-here*] folder to be located in the root directory of *My Drive*.
+    - Go to *Shared with me* and click on the *More actions* next to [*your-folder-name-here*].
+    - Click *Organize > Add a shortcut*
+    - At the top menu select *All locations*
+    - Select *My Drive*
+    - Click *Add*
+
+directory DO NOT MOVE the shared folder or edit it's contents for the notebook to work.
+
+Notebook usage:
+1. At the top menu click *Runtime > Run all*. This will run all the cells in the notebook and install OpenSoundscape (could take a few minutes).
+2. After installation, you will be prompted to give the notebook access to you Google Drive files:
+
+    - Connect to Google Drive
+    - Chose your account on the pop-up window. If you have more than one Google account, select the with which the link was shared.
+    - Click *Allow*
 
 Debugging:
-Runtime > Restart Runtime
+*Runtime > Restart Runtime*
 
 ## Requires
