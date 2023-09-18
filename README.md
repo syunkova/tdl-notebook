@@ -13,7 +13,6 @@ For more information, please visit https://www.kitzeslab.org/
 1. Set up a Google account if you don't already have one.
 2. Set up a Google Drive account if you don't already have one
 3. Create a folder to be shared with the listener located in the root directory of *My Drive*. It should contain two subdirectories:
-
 ```
    └── your-folder-name-here/
      ├── clips/
@@ -34,7 +33,7 @@ At the first run, `tdl_colab.ipynb` will create a copy of `_scores.csv` named `_
 
 ### 3. Set-up notebook
 
-1. Open the template notebook HERE
+1. Open the [template notebook](https://colab.research.google.com/drive/1Lb288F0hIuYP6L_vUxA2YCaj2OAv8qyS?usp=sharing)
 2. File > Save a copy in Google Drive: Select the root directory created.
 3. Make any needed changes, e.g. modify annotation options and scores file name.
 4. Share the link to the modified notebook with the listener.
