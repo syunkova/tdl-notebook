@@ -1,6 +1,6 @@
 # Top Down Listening notebook (Colab)
 
-This contains scrips and a Google Colab notebook for listening to audio clips and labeling them (Top-down listening). This is designed as part of a processing pipeline for data collected using Autonomous recording units (ARUs).
+This repository contains scripts and a Google Colab notebook for listening to audio clips and labeling them (locally nicknamed top-down listening). This is designed as part of a processing pipeline for data collected using autonomous recording units (ARUs).
 
 It works by mounting Google Drive into the notebook and loading audio clips. It needs a CSV file containing clip IDs and file paths (in Google Drive) to store input labels. 
 
@@ -11,7 +11,7 @@ For more information, please visit https://www.kitzeslab.org/
 ### 1. Google Drive set-up
 
 1. Set up a Google account if you don't already have one.
-2. Set up a Google Drive account if you don't already have one
+2. Set up a Google Drive account if you don't already have one.
 3. Create a folder to be shared with the listener located in the root directory of *My Drive*. It should contain two subdirectories:
 ```
    └── your-folder-name-here/
