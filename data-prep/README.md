@@ -1,4 +1,4 @@
-# Crate clips for top-down-listening
+# Crate clips for top-down-listening [UNDER DEVELOPMENT]
 
 It uses a CSV file with audio file paths, clip start and end times to create clips in a destination folder. An optional argument can be used to limit the number of clips based on a scores column.
 

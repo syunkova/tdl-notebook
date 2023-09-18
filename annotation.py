@@ -156,7 +156,7 @@ def annotate(audio_dir,
              valid_annotations = ["0", "1", "u"],
              scores_filename = "_scores.csv", 
              annotation_column = 'annotation',
-             index_column = 'relative_path',
+             path_column = 'relative_path',
              notes_column = 'notes',
              custom_annotation_column = 'additional_annotation',
              sort_by = None, 
@@ -186,7 +186,7 @@ def annotate(audio_dir,
     
     scores_df, annotation_csv_exists = load_scores_df(scores_csv_path,
                                annotation_column = annotation_column,
-                               index_column = index_column,
+                               index_column = path_column,
                                notes_column = notes_column,
                                custom_annotation_column = custom_annotation_column,
                                sort_by = sort_by, 
@@ -213,7 +213,7 @@ def annotate(audio_dir,
     
     for idx,row in valid_rows.iterrows():
         # Clear previous plot if any
-        ipd.clear_output()
+        ipd.clear_output(wait = True)
         
         # Print progress
         annotated_total = n_clips - n_clips_remaining
@@ -230,7 +230,7 @@ def annotate(audio_dir,
             print(f"Clip: {idx}")
         
             # plot_clip(idx, mark_at_s = [3, 7])
-            plot_clip(row['absolute_path'], mark_at_s = [3, 7])
+            plot_clip(row['absolute_path'], mark_at_s = [0, 5])
             time.sleep(.1) # Added delay for stability (hopefully)
             annotations = user_input(valid_annotations, custom_annotations_dict = custom_annotations_dict, positive_annotation = '1')
             
